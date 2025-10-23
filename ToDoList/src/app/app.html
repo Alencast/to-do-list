@@ -66,28 +66,28 @@
               </span>
             </td>
             <td>
-              <div class="flex gap-2">
+              <div class="flex gap-1 justify-center">
                 <p-button 
-                  icon="pi pi-info-circle"
-                  class="p-button-rounded p-button-info p-button-sm"
+                  icon="pi pi-search"
+                  class="p-button-rounded p-button-outlined p-button-secondary p-button-sm"
                   (onClick)="viewTodo(todo)"
-                  pTooltip="Ver detalhes da tarefa"
+                  pTooltip="Visualizar detalhes"
                   tooltipPosition="top"
                   pRipple>
                 </p-button>
                 <p-button 
-                  icon="pi pi-file-edit"
-                  class="p-button-rounded p-button-warning p-button-sm"
+                  icon="pi pi-pen-to-square"
+                  class="p-button-rounded p-button-outlined p-button-warning p-button-sm"
                   (onClick)="editTodo(todo)"
                   pTooltip="Editar tarefa"
                   tooltipPosition="top"
                   pRipple>
                 </p-button>
                 <p-button 
-                  icon="pi pi-times-circle"
-                  class="p-button-rounded p-button-danger p-button-sm"
+                  icon="pi pi-trash"
+                  class="p-button-rounded p-button-outlined p-button-danger p-button-sm"
                   (onClick)="deleteTodo(todo)"
-                  pTooltip="Remover tarefa"
+                  pTooltip="Excluir tarefa"
                   tooltipPosition="top"
                   pRipple>
                 </p-button>
