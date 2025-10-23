@@ -40,7 +40,7 @@
             <th class="w-12">Status</th>
             <th>Título</th>
             <th class="w-32">Prioridade</th>
-            <th class="w-32">Ações</th>
+            <th class="w-48">Ações</th>
           </tr>
         </ng-template>
         
@@ -66,28 +66,31 @@
               </span>
             </td>
             <td>
-              <div class="flex gap-1 justify-center">
+              <div class="flex gap-2 justify-center flex-wrap">
                 <p-button 
-                  icon="pi pi-search"
-                  class="p-button-rounded p-button-outlined p-button-secondary p-button-sm"
+                  icon="pi pi-eye"
+                  label="Ver"
+                  class="p-button-text p-button-info p-button-sm"
                   (onClick)="viewTodo(todo)"
-                  pTooltip="Visualizar detalhes"
+                  pTooltip="Visualizar detalhes da tarefa"
                   tooltipPosition="top"
                   pRipple>
                 </p-button>
                 <p-button 
-                  icon="pi pi-pen-to-square"
-                  class="p-button-rounded p-button-outlined p-button-warning p-button-sm"
+                  icon="pi pi-pencil"
+                  label="Editar"
+                  class="p-button-text p-button-warning p-button-sm"
                   (onClick)="editTodo(todo)"
-                  pTooltip="Editar tarefa"
+                  pTooltip="Editar esta tarefa"
                   tooltipPosition="top"
                   pRipple>
                 </p-button>
                 <p-button 
-                  icon="pi pi-trash"
-                  class="p-button-rounded p-button-outlined p-button-danger p-button-sm"
+                  icon="pi pi-times"
+                  label="Remover"
+                  class="p-button-text p-button-danger p-button-sm"
                   (onClick)="deleteTodo(todo)"
-                  pTooltip="Excluir tarefa"
+                  pTooltip="Excluir esta tarefa"
                   tooltipPosition="top"
                   pRipple>
                 </p-button>
