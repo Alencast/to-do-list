@@ -1,0 +1,53 @@
+/* Estilos customizados para a ToDo List */
+.line-through {
+  text-decoration: line-through;
+}
+
+.opacity-60 {
+  opacity: 0.6;
+}
+
+/* Classes Tailwind customizadas */
+.bg-danger-100 {
+  background-color: rgb(254 226 226);
+}
+
+.text-danger-800 {
+  color: rgb(153 27 27);
+}
+
+.bg-warning-100 {
+  background-color: rgb(254 243 199);
+}
+
+.text-warning-800 {
+  color: rgb(146 64 14);
+}
+
+.bg-success-100 {
+  background-color: rgb(220 252 231);
+}
+
+.text-success-800 {
+  color: rgb(22 101 52);
+}
+
+/* Animações sutis */
+.p-card {
+  transition: all 0.3s ease;
+}
+
+.p-button {
+  transition: all 0.2s ease;
+}
+
+/* Responsividade extra */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  
+  .p-table {
+    font-size: 0.875rem;
+  }
+}
