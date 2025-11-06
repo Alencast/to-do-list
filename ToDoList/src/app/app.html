@@ -67,7 +67,9 @@
             </td>
             <td>
               <div class="flex gap-2 justify-center flex-wrap">
-                <p-button 
+
+                <app-button (click)="viewTodo(todo)"  pTooltip="Visualizar detalhes da tarefa" labelpTooltip="Visualizar detalhes da tarefa"></app-button>
+                <!-- <p-button 
                   icon="pi pi-eye"
                   label="Ver"
                   class="p-button-text p-button-info p-button-sm"
@@ -75,8 +77,11 @@
                   pTooltip="Visualizar detalhes da tarefa"
                   tooltipPosition="top"
                   pRipple>
-                </p-button>
-                <p-button 
+                </p-button> -->
+
+                <app-button (click)="editTodo(todo)"  pTooltip="Editar tarefa" label="Editar"></app-button>
+
+                <!-- <p-button 
                   icon="pi pi-pencil"
                   label="Editar"
                   class="p-button-text p-button-warning p-button-sm"
@@ -84,8 +89,10 @@
                   pTooltip="Editar esta tarefa"
                   tooltipPosition="top"
                   pRipple>
-                </p-button>
-                <p-button 
+                </p-button> -->
+
+                <app-button (click)="deleteTodo(todo)" pTooltip="Excluir tarefa" label="Remover"></app-button>
+                <!-- <p-button 
                   icon="pi pi-times"
                   label="Remover"
                   class="p-button-text p-button-danger p-button-sm"
@@ -93,7 +100,7 @@
                   pTooltip="Excluir esta tarefa"
                   tooltipPosition="top"
                   pRipple>
-                </p-button>
+                </p-button> -->
               </div>
             </td>
           </tr>

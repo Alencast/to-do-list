@@ -21,11 +21,13 @@ import { MessageService } from 'primeng/api';
 import { ConfirmationService } from 'primeng/api';
 
 import { TodoItem } from './models/todo-item.model';
+import { Button } from './componentes/button/button';
 
 @Component({
   selector: 'app-root',
   imports: [
     RouterOutlet,
+    Button,
     FormsModule,
     CommonModule,
     ButtonModule,
