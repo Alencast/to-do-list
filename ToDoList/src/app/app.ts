@@ -22,12 +22,18 @@ import { ConfirmationService } from 'primeng/api';
 
 import { TodoItem } from './models/todo-item.model';
 import { Button } from './componentes/button/button';
+import { TodoListComponent } from './componentes/todo-list/todo-list.component';
+import { TodoFormComponent } from './componentes/todo-form/todo-form.component';
+import { TodoDetailComponent } from './componentes/todo-detail/todo-detail.component';
 
 @Component({
   selector: 'app-root',
   imports: [
     RouterOutlet,
     Button,
+    TodoListComponent,
+    TodoFormComponent,
+    TodoDetailComponent,
     FormsModule,
     CommonModule,
     ButtonModule,
@@ -95,8 +101,11 @@ export class App {
     this.showSelectedDialog.set(true);
   }
 
-  saveTodo() {
-    if (!this.newTodo.title.trim()) {
+  saveTodo(todoData?: TodoItem) {
+    // se não recebeu os dados do componente, usa os dados locais
+    const todoToSave = todoData || this.newTodo;
+    
+    if (!todoToSave.title.trim()) {
       this.messageService.add({
         severity: 'error',
         summary: 'Erro',
@@ -108,9 +117,9 @@ export class App {
     if (this.editMode()) {
       // Atualizar todo existente
       const currentTodos = this.todos();
-      const index = currentTodos.findIndex(t => t.id === this.newTodo.id);
+      const index = currentTodos.findIndex(t => t.id === todoToSave.id);
       if (index !== -1) {
-        currentTodos[index] = { ...this.newTodo };
+        currentTodos[index] = { ...todoToSave };
         this.todos.set([...currentTodos]);
         this.messageService.add({
           severity: 'success',
@@ -119,10 +128,10 @@ export class App {
         });
       }
     } else {
-      // Criar novo todo
+      //  novo todo
       const newId = Math.max(...this.todos().map(t => t.id), 0) + 1;
-      this.newTodo.id = newId;
-      this.todos.set([...this.todos(), { ...this.newTodo }]);
+      todoToSave.id = newId;
+      this.todos.set([...this.todos(), { ...todoToSave }]);
       this.messageService.add({
         severity: 'success',
         summary: 'Sucesso',
