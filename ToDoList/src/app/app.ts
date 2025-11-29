@@ -25,6 +25,7 @@ import { Button } from './componentes/button/button';
 import { TodoListComponent } from './componentes/todo-list/todo-list.component';
 import { TodoFormComponent } from './componentes/todo-form/todo-form.component';
 import { TodoDetailComponent } from './componentes/todo-detail/todo-detail.component';
+import { TodoService } from './services/todo.service';
 
 @Component({
   selector: 'app-root',
@@ -56,12 +57,6 @@ import { TodoDetailComponent } from './componentes/todo-detail/todo-detail.compo
 export class App {
   protected readonly title = signal('ToDo List');
   
-  todos = signal<TodoItem[]>([
-    { id: 1, title: 'Completar projeto Angular', priority: 1, completed: false },
-    { id: 2, title: 'Estudar PrimeNG', priority: 2, completed: true },
-    { id: 3, title: 'Implementar Tailwind CSS', priority: 3, completed: false }
-  ]);
-
   showDialog = signal(false);
   showSelectedDialog = signal(false);
   editMode = signal(false);
@@ -76,7 +71,8 @@ export class App {
 
   constructor(
     private messageService: MessageService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private todoService: TodoService
   ) {}
 
   openNew() {
@@ -101,70 +97,17 @@ export class App {
     this.showSelectedDialog.set(true);
   }
 
-  saveTodo(todoData?: TodoItem) {
-    // se não recebeu os dados do componente, usa os dados locais
-    const todoToSave = todoData || this.newTodo;
-    
-    if (!todoToSave.title.trim()) {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Erro',
-        detail: 'Título é obrigatório'
-      });
-      return;
-    }
-
-    if (this.editMode()) {
-      // Atualizar todo existente
-      const currentTodos = this.todos();
-      const index = currentTodos.findIndex(t => t.id === todoToSave.id);
-      if (index !== -1) {
-        currentTodos[index] = { ...todoToSave };
-        this.todos.set([...currentTodos]);
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Sucesso',
-          detail: 'Item atualizado com sucesso'
-        });
-      }
-    } else {
-      //  novo todo
-      const newId = Math.max(...this.todos().map(t => t.id), 0) + 1;
-      todoToSave.id = newId;
-      this.todos.set([...this.todos(), { ...todoToSave }]);
-      this.messageService.add({
-        severity: 'success',
-        summary: 'Sucesso',
-        detail: 'Item criado com sucesso'
-      });
-    }
-
+  saveTodo() {
+    // Usa o service diretamente
     this.showDialog.set(false);
   }
 
   deleteTodo(todo: TodoItem) {
-    this.confirmationService.confirm({
-      message: `Tem certeza que deseja excluir "${todo.title}"?`,
-      header: 'Confirmar Exclusão',
-      icon: 'pi pi-exclamation-triangle',
-      accept: () => {
-        this.todos.set(this.todos().filter(t => t.id !== todo.id));
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Sucesso',
-          detail: 'Item excluído com sucesso'
-        });
-      }
-    });
+    
   }
 
   toggleCompleted(todo: TodoItem) {
-    const currentTodos = this.todos();
-    const index = currentTodos.findIndex(t => t.id === todo.id);
-    if (index !== -1) {
-      currentTodos[index].completed = !currentTodos[index].completed;
-      this.todos.set([...currentTodos]);
-    }
+    // Método mantido para compatibilidade, mas componente usa service diretamente
   }
 
   getPriorityLabel(priority: number): string {
@@ -186,7 +129,11 @@ export class App {
   }
 
   getCompletedCount(): number {
-    return this.todos().filter(todo => todo.completed).length;
+    return this.todoService.getCompletedCount();
+  }
+
+  getTotalCount(): number {
+    return this.todoService.getTotalCount();
   }
 
   closeViewDialog() {

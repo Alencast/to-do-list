@@ -19,27 +19,21 @@
       </div>
       <div class="p-toolbar-group-end">
         <span class="text-sm text-gray-600">
-          Total: {{ todos().length }} | 
+          Total: {{ getTotalCount() }} | 
           Concluídas: {{ getCompletedCount() }}
         </span>
       </div>
     </p-toolbar>
 
-    <!-- Lista de Tarefas -->
-    <app-todo-list 
-      [todos]="todos()"
-      (viewTodo)="viewTodo($event)"
-      (editTodo)="editTodo($event)"
-      (deleteTodo)="deleteTodo($event)"
-      (toggleCompleted)="toggleCompleted($event)">
-    </app-todo-list>
-
-    <!-- form -->
+  <!-- Lista de Tarefas -->
+  <app-todo-list 
+    (viewTodo)="viewTodo($event)"
+    (editTodo)="editTodo($event)">
+  </app-todo-list>    <!-- form -->
     <app-todo-form
       [todo]="newTodo"
       [editMode]="editMode()"
       [visible]="showDialog()"
-      (save)="saveTodo($event)"
       (cancel)="showDialog.set(false)"
       (visibleChange)="showDialog.set($event)">
     </app-todo-form>

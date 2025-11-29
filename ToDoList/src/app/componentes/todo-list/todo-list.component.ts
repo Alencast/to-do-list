@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
@@ -7,6 +7,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { TooltipModule } from 'primeng/tooltip';
 import { TodoItem } from '../../models/todo-item.model';
 import { Button } from '../button/button';
+import { TodoService } from '../../services/todo.service';
 
 @Component({
   selector: 'app-todo-list',
@@ -102,11 +103,15 @@ import { Button } from '../button/button';
   `
 })
 export class TodoListComponent {
-  @Input() todos: TodoItem[] = [];
   @Output() viewTodo = new EventEmitter<TodoItem>();
   @Output() editTodo = new EventEmitter<TodoItem>();
-  @Output() deleteTodo = new EventEmitter<TodoItem>();
-  @Output() toggleCompleted = new EventEmitter<TodoItem>();
+
+  constructor(private todoService: TodoService) {}
+
+  // Getter para acessar os todos do service
+  get todos() {
+    return this.todoService.getTodos()();
+  }
 
   onViewTodo(todo: TodoItem) {
     this.viewTodo.emit(todo);
@@ -117,11 +122,13 @@ export class TodoListComponent {
   }
 
   onDeleteTodo(todo: TodoItem) {
-    this.deleteTodo.emit(todo);
+    // Usa o service diretamente para deletar
+    this.todoService.deleteTodo(todo.id);
   }
 
   onToggleCompleted(todo: TodoItem) {
-    this.toggleCompleted.emit(todo);
+    // Usa o service diretamente para toggle
+    this.todoService.toggleCompleted(todo.id);
   }
 
   getPriorityLabel(priority: number): string {
