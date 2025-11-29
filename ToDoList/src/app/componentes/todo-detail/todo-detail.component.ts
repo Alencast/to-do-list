@@ -5,6 +5,7 @@ import { RippleModule } from 'primeng/ripple';
 import { TooltipModule } from 'primeng/tooltip';
 import { TodoItem } from '../../models/todo-item.model';
 import { Button } from '../button/button';
+import { TodoService } from '../../services/todo.service';
 
 @Component({
   selector: 'app-todo-detail',
@@ -73,6 +74,8 @@ export class TodoDetailComponent {
   @Input() visible = false;
   @Output() close = new EventEmitter<void>();
   @Output() visibleChange = new EventEmitter<boolean>();
+
+  constructor(private todoService: TodoService) {}
 
   onClose() {
     this.visible = false;

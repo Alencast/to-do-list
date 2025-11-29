@@ -9,6 +9,7 @@ import { RippleModule } from 'primeng/ripple';
 import { TooltipModule } from 'primeng/tooltip';
 import { TodoItem } from '../../models/todo-item.model';
 import { Button } from '../button/button';
+import { TodoService } from '../../services/todo.service';
 
 @Component({
   selector: 'app-todo-form',
@@ -108,9 +109,10 @@ export class TodoFormComponent {
   };
   @Input() editMode = false;
   @Input() visible = false;
-  @Output() save = new EventEmitter<TodoItem>();
   @Output() cancel = new EventEmitter<void>();
   @Output() visibleChange = new EventEmitter<boolean>();
+
+  constructor(private todoService: TodoService) {}
 
   todoData: TodoItem = {
     id: 0,
@@ -126,9 +128,18 @@ export class TodoFormComponent {
 
   onSave() {
     if (!this.todoData.title.trim()) {
-      return; // Deixa a validação para o componente pai
+      return;
     }
-    this.save.emit({ ...this.todoData });
+    
+    if (this.editMode) {
+      // Atualizar todo existente
+      this.todoService.updateTodo(this.todoData);
+    } else {
+      // Criar novo todo
+      this.todoService.addTodo(this.todoData);
+    }
+    
+    this.onCancel();
   }
 
   onCancel() {
