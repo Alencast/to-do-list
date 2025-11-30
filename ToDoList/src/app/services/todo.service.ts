@@ -1,17 +1,21 @@
 import { Injectable, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { TodoItem } from '../models/todo-item.model';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TodoService {
+  private apiUrl = 'http://localhost:8000/api/todos';
+  
   private todos = signal<TodoItem[]>([
     { id: 1, title: 'Completar projeto Angular', priority: 1, completed: false },
     { id: 2, title: 'Estudar PrimeNG', priority: 2, completed: true },
     { id: 3, title: 'Implementar Tailwind CSS', priority: 3, completed: false }
   ]);
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
   // Listar todos os to dos
   getTodos() {
@@ -59,20 +63,6 @@ export class TodoService {
     return false;
   }
 
-  // deleteTodo(todo: TodoItem) {
-  //   this.confirmationService.confirm({
-  //     message: `Tem certeza que deseja excluir "${todo.title}"?`,
-  //     header: 'Confirmar Exclusão',
-  //     icon: 'pi pi-exclamation-triangle',
-  //     accept: () => {
-  //       this.todos.set(this.todos().filter(t => t.id !== todo.id));
-  //       this.messageService.add({
-  //         severity: 'success',
-  //         summary: 'Sucesso',
-  //         detail: 'Item excluído com sucesso'
-  //       });
-  //     }
-  //   });
 
   // Alternar status de conclusão
   toggleCompleted(id: number): boolean {
@@ -96,5 +86,66 @@ export class TodoService {
   // Obter total de todos
   getTotalCount(): number {
     return this.todos().length;
+  }
+
+  // ===== MÉTODOS API DJANGO REST =====
+  
+  // Carregar todos do backend e atualizar o signal local
+  loadTodosFromApi(): void {
+    this.http.get<TodoItem[]>(this.apiUrl + '/').subscribe({
+      next: (response) => {
+        console.log('✅ Tarefas carregadas do backend:', response);
+        this.todos.set(response);
+      },
+      error: (error) => {
+        console.error('❌ Erro ao carregar tarefas:', error);
+      }
+    });
+  }
+  
+  // Testar conexão com API Django
+  testApiConnection(): void {
+    console.log('🔄 Testando conexão com Django REST API...');
+    this.http.get<{message: string}>(this.apiUrl + '/teste/').subscribe({
+      next: (response) => {
+        console.log('✅ Conexão bem-sucedida!');
+        console.log('📦 Resposta do servidor:', response);
+        console.log('💬 Mensagem:', response.message);
+      },
+      error: (error) => {
+        console.error('❌ Erro ao conectar com a API:', error);
+        console.error('Detalhes:', error.message);
+      }
+    });
+  }
+
+  // Buscar todos da API
+  getTodosFromApi(): Observable<TodoItem[]> {
+    return this.http.get<TodoItem[]>(this.apiUrl + '/');
+  }
+
+  // Buscar todo por ID da API
+  getTodoByIdFromApi(id: number): Observable<TodoItem> {
+    return this.http.get<TodoItem>(`${this.apiUrl}/${id}/`);
+  }
+
+  // Criar todo na API
+  createTodoInApi(todo: Omit<TodoItem, 'id'>): Observable<TodoItem> {
+    return this.http.post<TodoItem>(this.apiUrl + '/', todo);
+  }
+
+  // Atualizar todo na API
+  updateTodoInApi(todo: TodoItem): Observable<TodoItem> {
+    return this.http.put<TodoItem>(`${this.apiUrl}/${todo.id}/`, todo);
+  }
+
+  // Deletar todo na API
+  deleteTodoFromApi(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}/`);
+  }
+
+  // Toggle status na API
+  toggleTodoInApi(id: number): Observable<TodoItem> {
+    return this.http.patch<TodoItem>(`${this.apiUrl}/${id}/toggle/`, {});
   }
 }

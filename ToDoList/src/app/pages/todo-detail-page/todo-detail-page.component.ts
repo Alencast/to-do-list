@@ -84,8 +84,17 @@ export class TodoDetailPageComponent implements OnInit {
   ngOnInit() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     if (id) {
-      const foundTodo = this.todoService.getTodoById(id);
-      this.todo.set(foundTodo || null);
+      // Buscar tarefa do backend via API
+      this.todoService.getTodoByIdFromApi(id).subscribe({
+        next: (response) => {
+          console.log('✅ Tarefa carregada do backend:', response);
+          this.todo.set(response);
+        },
+        error: (error) => {
+          console.error('❌ Erro ao carregar tarefa:', error);
+          this.todo.set(null);
+        }
+      });
     }
   }
 

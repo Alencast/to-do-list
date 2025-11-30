@@ -154,10 +154,21 @@ export class TodoEditPageComponent implements OnInit {
   ngOnInit() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     if (id) {
-      const foundTodo = this.todoService.getTodoById(id);
-      if (foundTodo) {
-        this.editTodo = { ...foundTodo };
-      }
+      // Buscar tarefa do backend para edição
+      this.todoService.getTodoByIdFromApi(id).subscribe({
+        next: (response) => {
+          console.log('✅ Tarefa carregada para edição:', response);
+          this.editTodo = { ...response };
+        },
+        error: (error) => {
+          console.error('❌ Erro ao carregar tarefa:', error);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Erro',
+            detail: 'Não foi possível carregar a tarefa'
+          });
+        }
+      });
     }
   }
 
@@ -171,25 +182,30 @@ export class TodoEditPageComponent implements OnInit {
       return;
     }
 
-    const success = this.todoService.updateTodo(this.editTodo);
-    if (success) {
-      this.messageService.add({
-        severity: 'success',
-        summary: 'Sucesso',
-        detail: 'Tarefa atualizada com sucesso'
-      });
+    // Atualizar tarefa no backend via API (usando PUT)
+    this.todoService.updateTodoInApi(this.editTodo).subscribe({
+      next: (response) => {
+        console.log('✅ Tarefa atualizada no backend:', response);
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Sucesso',
+          detail: 'Tarefa atualizada com sucesso'
+        });
 
-      // Aguarda um pouco para mostrar o toast antes de navegar
-      setTimeout(() => {
-        this.router.navigate(['/todos']);
-      }, 1000);
-    } else {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Erro',
-        detail: 'Não foi possível atualizar a tarefa'
-      });
-    }
+        // Aguarda um pouco para mostrar o toast antes de navegar
+        setTimeout(() => {
+          this.router.navigate(['/todos']);
+        }, 1000);
+      },
+      error: (error) => {
+        console.error('❌ Erro ao atualizar tarefa:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erro',
+          detail: 'Não foi possível atualizar a tarefa'
+        });
+      }
+    });
   }
 
   navigateToList() {

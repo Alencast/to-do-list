@@ -116,9 +116,24 @@ export class TodoCreatePageComponent {
       return;
     }
 
-    this.todoService.addTodo(this.newTodo);
-    alert('Tarefa criada com sucesso!');
-    this.router.navigate(['/todos']);
+    // Criando tarefa no backend via API
+    const todoData = {
+      title: this.newTodo.title,
+      priority: this.newTodo.priority,
+      completed: false
+    };
+
+    this.todoService.createTodoInApi(todoData).subscribe({
+      next: (response) => {
+        console.log('✅ Tarefa criada no backend:', response);
+        alert('Tarefa criada com sucesso!');
+        this.router.navigate(['/todos']);
+      },
+      error: (error) => {
+        console.error('❌ Erro ao criar tarefa:', error);
+        alert('Erro ao criar tarefa. Verifique o console.');
+      }
+    });
   }
 
   navigateToList() {

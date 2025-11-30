@@ -43,6 +43,22 @@ import { FormsModule } from '@angular/forms';
               tooltip="Criar uma nova tarefa"
               (clicked)="navigateToCreate()">
             </app-button>
+            
+            <app-button 
+              label="Testar API"
+              icon="pi pi-bolt"
+              buttonClass="p-button-info ml-2"
+              tooltip="Testar conexão com Django REST API"
+              (clicked)="testApi()">
+            </app-button>
+            
+            <app-button 
+              label="Recarregar"
+              icon="pi pi-refresh"
+              buttonClass="p-button-secondary ml-2"
+              tooltip="Recarregar tarefas do backend"
+              (clicked)="reloadTodos()">
+            </app-button>
           </div>
           <div class="p-toolbar-group-end">
             <span class="text-sm text-gray-600">
@@ -140,6 +156,11 @@ export class TodoListPageComponent {
   protected todoService = inject(TodoService);
   private router = inject(Router);
 
+  ngOnInit() {
+    // Carregar tarefas do backend ao inicializar a página
+    this.todoService.loadTodosFromApi();
+  }
+
   navigateToCreate() {
     this.router.navigate(['/todos/new']);
   }
@@ -154,7 +175,18 @@ export class TodoListPageComponent {
 
   deleteTodo(todo: TodoItem) {
     if (confirm(`Tem certeza que deseja excluir "${todo.title}"?`)) {
-      this.todoService.deleteTodo(todo.id);
+      // Deletar tarefa no backend via API
+      this.todoService.deleteTodoFromApi(todo.id).subscribe({
+        next: () => {
+          console.log('✅ Tarefa deletada do backend:', todo.title);
+          // Recarregar lista após deletar
+          this.todoService.loadTodosFromApi();
+        },
+        error: (error) => {
+          console.error('❌ Erro ao deletar tarefa:', error);
+          alert('Erro ao deletar tarefa. Verifique o console.');
+        }
+      });
     }
   }
 
@@ -178,5 +210,15 @@ export class TodoListPageComponent {
       case 3: return 'green';
       default: return 'blue';
     }
+  }
+
+  testApi() {
+    console.log('🚀 Iniciando teste da API Django...');
+    this.todoService.testApiConnection();
+  }
+
+  reloadTodos() {
+    console.log('🔄 Recarregando tarefas do backend...');
+    this.todoService.loadTodosFromApi();
   }
 }
