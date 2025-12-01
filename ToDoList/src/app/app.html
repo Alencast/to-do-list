@@ -1,51 +1,6 @@
-<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-  <div class="container mx-auto max-w-6xl">
-    <!-- Header -->
-    <div class="text-center mb-8">
-      <h1 class="text-4xl font-bold text-gray-800 mb-2">{{ title() }}</h1>
-      <p class="text-gray-600">Gerencie suas tarefas</p>
-    </div>
-
-    <!-- Toolbar -->
-    <p-toolbar class="mb-6 rounded-lg shadow-sm">
-      <div class="p-toolbar-group-start">
-        <app-button 
-          label="Nova Tarefa"
-          icon="pi pi-plus-circle"
-          buttonClass="p-button-success"
-          tooltip="Criar uma nova tarefa"
-          (clicked)="openNew()">
-        </app-button>
-      </div>
-      <div class="p-toolbar-group-end">
-        <span class="text-sm text-gray-600">
-          Total: {{ getTotalCount() }} | 
-          Concluídas: {{ getCompletedCount() }}
-        </span>
-      </div>
-    </p-toolbar>
-
-  <!-- Lista de Tarefas -->
-  <app-todo-list 
-    (viewTodo)="viewTodo($event)"
-    (editTodo)="editTodo($event)">
-  </app-todo-list>    <!-- form -->
-    <app-todo-form
-      [todo]="newTodo"
-      [editMode]="editMode()"
-      [visible]="showDialog()"
-      (cancel)="showDialog.set(false)"
-      (visibleChange)="showDialog.set($event)">
-    </app-todo-form>
-
-    <!-- Detalhes -->
-    <app-todo-detail
-      [todo]="selectedTodo()"
-      [visible]="showSelectedDialog()"
-      (close)="closeViewDialog()"
-      (visibleChange)="showSelectedDialog.set($event)">
-    </app-todo-detail>
-  </div>
+<div>
+  <h1>Todo List App</h1>
+  <router-outlet />
 </div>
 
 <!-- Toast para notificações -->
@@ -53,5 +8,3 @@
 
 <!-- Confirm Dialog -->
 <p-confirmDialog></p-confirmDialog>
-
-<router-outlet />
