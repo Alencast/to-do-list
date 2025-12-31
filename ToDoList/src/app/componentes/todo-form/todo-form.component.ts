@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, input, output, model, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
@@ -26,8 +26,8 @@ import { TodoService } from '../../services/todo.service';
   ],
   template: `
     <p-dialog 
-      [header]="editMode ? 'Editar Tarefa' : 'Nova Tarefa'"
-      [(visible)]="visible"
+      [header]="editMode() ? 'Editar Tarefa' : 'Nova Tarefa'"
+      [(visible)]="visibleModel"
       [modal]="true"
       [style]="{ width: '450px' }"
       [draggable]="false"
@@ -68,7 +68,7 @@ import { TodoService } from '../../services/todo.service';
           <small class="text-gray-500">1 = Alta, 2 = Média, 3 = Baixa</small>
         </div>
         
-        <div *ngIf="editMode">
+        <div *ngIf="editMode()">
           <label class="flex items-center gap-2">
             <p-checkbox 
               [binary]="true"
@@ -90,8 +90,8 @@ import { TodoService } from '../../services/todo.service';
           </app-button>
           
           <app-button 
-            [label]="editMode ? 'Atualizar' : 'Criar'"
-            [icon]="editMode ? 'pi pi-save' : 'pi pi-plus-circle'"
+            [label]="editMode() ? 'Atualizar' : 'Criar'"
+            [icon]="editMode() ? 'pi pi-save' : 'pi pi-plus-circle'"
             tooltip="Salvar tarefa"
             (clicked)="onSave()">
           </app-button>
@@ -100,19 +100,18 @@ import { TodoService } from '../../services/todo.service';
     </p-dialog>
   `
 })
-export class TodoFormComponent {
-  @Input() todo: TodoItem = {
+export class TodoForm {
+  private todoService = inject(TodoService);
+
+  todo = input<TodoItem>({
     id: 0,
     title: '',
     priority: 1,
     completed: false
-  };
-  @Input() editMode = false;
-  @Input() visible = false;
-  @Output() cancel = new EventEmitter<void>();
-  @Output() visibleChange = new EventEmitter<boolean>();
-
-  constructor(private todoService: TodoService) {}
+  });
+  editMode = input<boolean>(false);
+  visibleModel = model<boolean>(false);
+  cancel = output<void>();
 
   todoData: TodoItem = {
     id: 0,
@@ -123,7 +122,7 @@ export class TodoFormComponent {
 
   ngOnChanges() {
     // Copia os dados do todo de entrada para o formulário
-    this.todoData = { ...this.todo };
+    this.todoData = { ...this.todo() };
   }
 
   onSave() {
@@ -131,7 +130,7 @@ export class TodoFormComponent {
       return;
     }
     
-    if (this.editMode) {
+    if (this.editMode()) {
       // Atualizar todo existente
       this.todoService.updateTodo(this.todoData);
     } else {
@@ -143,8 +142,7 @@ export class TodoFormComponent {
   }
 
   onCancel() {
-    this.visible = false;
-    this.visibleChange.emit(false);
+    this.visibleModel.set(false);
     this.cancel.emit();
   }
 }

@@ -99,7 +99,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
     </div>
   `
 })
-export class TodoCreatePageComponent {
+export class TodoCreatePage {
   newTodo: TodoItem = {
     id: 0,
     title: '',

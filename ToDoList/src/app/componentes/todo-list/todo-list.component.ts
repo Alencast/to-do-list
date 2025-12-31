@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
@@ -102,11 +102,11 @@ import { TodoService } from '../../services/todo.service';
     </p-card>
   `
 })
-export class TodoListComponent {
-  @Output() viewTodo = new EventEmitter<TodoItem>();
-  @Output() editTodo = new EventEmitter<TodoItem>();
+export class TodoList {
+  private todoService = inject(TodoService);
 
-  constructor(private todoService: TodoService) {}
+  viewTodo = output<TodoItem>();
+  editTodo = output<TodoItem>();
 
   // Getter para acessar os todos do service
   get todos() {
