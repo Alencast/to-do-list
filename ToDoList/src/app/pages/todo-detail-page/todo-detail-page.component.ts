@@ -74,7 +74,7 @@ import { CardModule } from 'primeng/card';
     </div>
   `
 })
-export class TodoDetailPageComponent implements OnInit {
+export class TodoDetailPage implements OnInit {
   protected todo = signal<TodoItem | null>(null);
   
   private route = inject(ActivatedRoute);

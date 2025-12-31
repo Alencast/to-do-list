@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, input, output, model, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DialogModule } from 'primeng/dialog';
 import { RippleModule } from 'primeng/ripple';
@@ -19,30 +19,30 @@ import { TodoService } from '../../services/todo.service';
   template: `
     <p-dialog 
       header="Detalhes da Tarefa"
-      [(visible)]="visible"
+      [(visible)]="visibleModel"
       [modal]="true"
       [style]="{ width: '400px' }"
       [draggable]="false"
       [resizable]="false"
       (onHide)="onClose()">
       
-      <div *ngIf="todo" class="flex flex-col gap-4">
+      <div *ngIf="todo()" class="flex flex-col gap-4">
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">ID</label>
-          <p class="text-gray-900">{{ todo.id }}</p>
+          <p class="text-gray-900">{{ todo()?.id }}</p>
         </div>
         
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">Título</label>
-          <p class="text-gray-900">{{ todo.title }}</p>
+          <p class="text-gray-900">{{ todo()?.title }}</p>
         </div>
         
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">Prioridade</label>
           <span 
             class="inline-block px-3 py-1 rounded-full text-sm font-medium"
-            [class]="'bg-' + getPrioritySeverity(todo.priority) + '-100 text-' + getPrioritySeverity(todo.priority) + '-800'">
-            {{ getPriorityLabel(todo.priority) }}
+            [class]="'bg-' + getPrioritySeverity(todo()?.priority || 1) + '-100 text-' + getPrioritySeverity(todo()?.priority || 1) + '-800'">
+            {{ getPriorityLabel(todo()?.priority || 1) }}
           </span>
         </div>
         
@@ -50,8 +50,8 @@ import { TodoService } from '../../services/todo.service';
           <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
           <span 
             class="inline-block px-3 py-1 rounded-full text-sm font-medium"
-            [class]="todo.completed ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'">
-            {{ todo.completed ? 'Concluída' : 'Pendente' }}
+            [class]="todo()?.completed ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'">
+            {{ todo()?.completed ? 'Concluída' : 'Pendente' }}
           </span>
         </div>
       </div>
@@ -69,17 +69,15 @@ import { TodoService } from '../../services/todo.service';
     </p-dialog>
   `
 })
-export class TodoDetailComponent {
-  @Input() todo: TodoItem | null = null;
-  @Input() visible = false;
-  @Output() close = new EventEmitter<void>();
-  @Output() visibleChange = new EventEmitter<boolean>();
+export class TodoDetail {
+  private todoService = inject(TodoService);
 
-  constructor(private todoService: TodoService) {}
+  todo = input<TodoItem | null>(null);
+  visibleModel = model<boolean>(false);
+  close = output<void>();
 
   onClose() {
-    this.visible = false;
-    this.visibleChange.emit(false);
+    this.visibleModel.set(false);
     this.close.emit();
   }
 

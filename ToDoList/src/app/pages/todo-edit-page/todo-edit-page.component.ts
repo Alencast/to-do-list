@@ -51,12 +51,12 @@ import { ToastModule } from 'primeng/toast';
             buttonClass="p-button-text p-button-info"
             tooltip="Visualizar detalhes"
             (clicked)="navigateToDetail()"
-            *ngIf="editTodo.id">
+            *ngIf="editTodo()">
           </app-button>
         </div>
 
         <!-- Form -->
-        <p-card class="shadow-lg rounded-lg" *ngIf="editTodo.id">
+        <p-card class="shadow-lg rounded-lg" *ngIf="editTodo()">
           <div class="flex flex-col gap-4">
             <div>
               <label for="title" class="block text-sm font-medium text-gray-700 mb-2">
@@ -66,7 +66,7 @@ import { ToastModule } from 'primeng/toast';
                 id="title"
                 type="text" 
                 pInputText 
-                [(ngModel)]="editTodo.title"
+                [(ngModel)]="todoData.title"
                 placeholder="Digite o título da tarefa"
                 class="w-full" />
             </div>
@@ -77,7 +77,7 @@ import { ToastModule } from 'primeng/toast';
               </label>
               <p-inputNumber
                 id="priority"
-                [(ngModel)]="editTodo.priority"
+                [(ngModel)]="todoData.priority"
                 [min]="1"
                 [max]="3"
                 [showButtons]="true"
@@ -95,7 +95,7 @@ import { ToastModule } from 'primeng/toast';
               <label class="flex items-center gap-2">
                 <p-checkbox 
                   [binary]="true"
-                  [(ngModel)]="editTodo.completed">
+                  [(ngModel)]="todoData.completed">
                 </p-checkbox>
                 <span class="text-sm font-medium text-gray-700">Tarefa concluída</span>
               </label>
@@ -122,7 +122,7 @@ import { ToastModule } from 'primeng/toast';
         </p-card>
 
         <!-- Error State -->
-        <p-card class="shadow-lg rounded-lg" *ngIf="!editTodo.id">
+        <p-card class="shadow-lg rounded-lg" *ngIf="!editTodo()">
           <div class="text-center py-8">
             <div class="text-gray-500">
               <i class="pi pi-exclamation-triangle text-3xl mb-3 block text-red-500"></i>
@@ -138,18 +138,19 @@ import { ToastModule } from 'primeng/toast';
     <p-toast></p-toast>
   `
 })
-export class TodoEditPageComponent implements OnInit {
-  editTodo: TodoItem = {
+export class TodoEditPage implements OnInit {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private todoService = inject(TodoService);
+  private messageService = inject(MessageService);
+
+  editTodo = signal<TodoItem | null>(null);
+  todoData: TodoItem = {
     id: 0,
     title: '',
     priority: 1,
     completed: false
   };
-
-  private route = inject(ActivatedRoute);
-  private router = inject(Router);
-  private todoService = inject(TodoService);
-  private messageService = inject(MessageService);
 
   ngOnInit() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
@@ -158,7 +159,8 @@ export class TodoEditPageComponent implements OnInit {
       this.todoService.getTodoByIdFromApi(id).subscribe({
         next: (response) => {
           console.log('✅ Tarefa carregada para edição:', response);
-          this.editTodo = { ...response };
+          this.editTodo.set(response);
+          this.todoData = { ...response };
         },
         error: (error) => {
           console.error('❌ Erro ao carregar tarefa:', error);
@@ -173,7 +175,7 @@ export class TodoEditPageComponent implements OnInit {
   }
 
   updateTodo() {
-    if (!this.editTodo.title.trim()) {
+    if (!this.todoData.title.trim()) {
       this.messageService.add({
         severity: 'error',
         summary: 'Erro',
@@ -183,7 +185,7 @@ export class TodoEditPageComponent implements OnInit {
     }
 
     // Atualizar tarefa no backend via API (usando PUT)
-    this.todoService.updateTodoInApi(this.editTodo).subscribe({
+    this.todoService.updateTodoInApi(this.todoData).subscribe({
       next: (response) => {
         console.log('✅ Tarefa atualizada no backend:', response);
         this.messageService.add({
@@ -213,6 +215,9 @@ export class TodoEditPageComponent implements OnInit {
   }
 
   navigateToDetail() {
-    this.router.navigate(['/todos', this.editTodo.id]);
+    const todo = this.editTodo();
+    if (todo) {
+      this.router.navigate(['/todos', todo.id]);
+    }
   }
 }

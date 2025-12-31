@@ -152,7 +152,7 @@ import { FormsModule } from '@angular/forms';
     </div>
   `
 })
-export class TodoListPageComponent {
+export class TodoListPage {
   protected todoService = inject(TodoService);
   private router = inject(Router);
 
