@@ -1,0 +1,57 @@
+<div class="login-container">
+  <p-card class="login-card">
+    <ng-template pTemplate="header">
+      <div class="card-header">
+        <h2>Login</h2>
+        <p>Acesse sua conta</p>
+      </div>
+    </ng-template>
+
+    @if (errorMessage()) {
+      <p-message severity="error" [text]="errorMessage()!" styleClass="mb-4 w-full" />
+    }
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="username" class="block mb-2 font-medium">Nome de Usuário</label>
+        <input 
+          pInputText 
+          id="username" 
+          formControlName="username"
+          placeholder="Digite seu nome de usuário"
+          class="w-full"
+          [class.p-invalid]="username?.invalid && username?.touched"
+        />
+        @if (username?.invalid && username?.touched) {
+          <small class="p-error block mt-1">Nome de usuário é obrigatório</small>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="password" class="block mb-2 font-medium">Senha</label>
+        <p-password 
+          id="password" 
+          formControlName="password"
+          placeholder="Digite sua senha"
+          [feedback]="false"
+          [toggleMask]="true"
+          styleClass="w-full"
+          inputStyleClass="w-full"
+          [class.p-invalid]="password?.invalid && password?.touched"
+        />
+        @if (password?.invalid && password?.touched) {
+          <small class="p-error block mt-1">Senha é obrigatória</small>
+        }
+      </div>
+
+      <p-button 
+        type="submit" 
+        label="Entrar" 
+        icon="pi pi-sign-in"
+        [loading]="isLoading()"
+        [disabled]="isLoading()"
+        styleClass="w-full"
+      />
+    </form>
+  </p-card>
+</div>

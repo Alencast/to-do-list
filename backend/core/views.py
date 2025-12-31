@@ -1,10 +1,13 @@
 from django.shortcuts import render
-from rest_framework import viewsets, filters, status
+from django.contrib.auth import authenticate
+from rest_framework import viewsets, filters, status, views
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.permissions import AllowAny
+from rest_framework_simplejwt.tokens import RefreshToken
 from django_filters.rest_framework import DjangoFilterBackend
 from .models import TodoItem
-from .serializers import TodoItemSerializer
+from .serializers import TodoItemSerializer, LoginSerializer, UserSerializer
 
 
 class TodoItemViewSet(viewsets.ModelViewSet):
@@ -108,4 +111,35 @@ class TodoItemViewSet(viewsets.ModelViewSet):
         Endpoint de teste para verificar se a ViewSet está funcionando
         """
         return Response({'message': 'Endpoint de teste funcionando!'}, status=status.HTTP_200_OK)
+
+
+class LoginView(views.APIView):
+    """
+    POST /api/auth/login/
+    Endpoint de login que retorna tokens JWT
+    """
+    permission_classes = [AllowAny]
+    
+    def post(self, request):
+        serializer = LoginSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        
+        username = serializer.validated_data['username']
+        password = serializer.validated_data['password']
+        
+        user = authenticate(username=username, password=password)
+        
+        if user is not None:
+            refresh = RefreshToken.for_user(user)
+            user_serializer = UserSerializer(user)
+            
+            return Response({
+                'access': str(refresh.access_token),
+                'refresh': str(refresh),
+                'user': user_serializer.data
+            }, status=status.HTTP_200_OK)
+        else:
+            return Response({
+                'error': 'Credenciais inválidas'
+            }, status=status.HTTP_401_UNAUTHORIZED)
 
