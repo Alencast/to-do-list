@@ -11,6 +11,7 @@ import { TooltipModule } from 'primeng/tooltip';
       [label]="label()"
       [icon]="icon()"
       [class]="buttonClass()"
+      [disabled]="disabled()"
       (onClick)="handleClick()"
       [pTooltip]="tooltip()"
       tooltipPosition="top"
@@ -23,9 +24,12 @@ export class Button {
   icon = input<string>('');
   buttonClass = input<string>('');
   tooltip = input<string>('');
+  disabled = input<boolean>(false);
   clicked = output<void>();
 
   handleClick() {
-    this.clicked.emit();
+    if (!this.disabled()) {
+      this.clicked.emit();
+    }
   }
 }

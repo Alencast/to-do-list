@@ -1,7 +1,8 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { Validators } from '@angular/forms';
+import { form, Field, metadata, REQUIRED, MIN, MAX } from '@angular/forms/signals';
 import { TodoService } from '../../services/todo.service';
 import { TodoItem } from '../../models/todo-item.model';
 import { Button } from '../../componentes/button/button';
@@ -17,7 +18,7 @@ import { ToastModule } from 'primeng/toast';
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule,
+    Field,
     Button,
     CardModule,
     InputTextModule,
@@ -57,68 +58,76 @@ import { ToastModule } from 'primeng/toast';
 
         <!-- Form -->
         <p-card class="shadow-lg rounded-lg" *ngIf="editTodo()">
-          <div class="flex flex-col gap-4">
-            <div>
-              <label for="title" class="block text-sm font-medium text-gray-700 mb-2">
-                Título *
-              </label>
-              <input 
-                id="title"
-                type="text" 
-                pInputText 
-                [(ngModel)]="todoData.title"
-                placeholder="Digite o título da tarefa"
-                class="w-full" />
+          <form (submit)="$event.preventDefault(); updateTodo()">
+            <div class="flex flex-col gap-4">
+              <div>
+                <label for="title" class="block text-sm font-medium text-gray-700 mb-2">
+                  Título *
+                </label>
+                <input 
+                  id="title"
+                  type="text" 
+                  pInputText 
+                  [field]="todoForm.title"
+                  placeholder="Digite o título da tarefa"
+                  class="w-full" 
+                  [class.ng-invalid]="todoForm.title().invalid() && todoForm.title().touched()" />
+                
+                @if (todoForm.title().errors().length && todoForm.title().touched()) {
+                  <small class="text-red-500 block mt-1">O título é obrigatório.</small>
+                }
+              </div>
+              
+              <div>
+                <label for="priority" class="block text-sm font-medium text-gray-700 mb-2">
+                  Prioridade
+                </label>
+                <p-inputNumber
+                  id="priority"
+                  [field]="todoForm.priority"
+                  [min]="1"
+                  [max]="3"
+                  [showButtons]="true"
+                  buttonLayout="horizontal"
+                  spinnerMode="horizontal"
+                  [step]="1"
+                  decrementButtonClass="p-button-secondary"
+                  incrementButtonClass="p-button-secondary"
+                  class="w-full">
+                </p-inputNumber>
+                <small class="text-gray-500">1 = Alta, 2 = Média, 3 = Baixa</small>
+              </div>
+              
+              <div>
+                <label class="flex items-center gap-2">
+                  <p-checkbox 
+                    [binary]="true"
+                    [field]="todoForm.completed">
+                  </p-checkbox>
+                  <span class="text-sm font-medium text-gray-700">Tarefa concluída</span>
+                </label>
+              </div>
             </div>
             
-            <div>
-              <label for="priority" class="block text-sm font-medium text-gray-700 mb-2">
-                Prioridade
-              </label>
-              <p-inputNumber
-                id="priority"
-                [(ngModel)]="todoData.priority"
-                [min]="1"
-                [max]="3"
-                [showButtons]="true"
-                buttonLayout="horizontal"
-                spinnerMode="horizontal"
-                [step]="1"
-                decrementButtonClass="p-button-secondary"
-                incrementButtonClass="p-button-secondary"
-                class="w-full">
-              </p-inputNumber>
-              <small class="text-gray-500">1 = Alta, 2 = Média, 3 = Baixa</small>
+            <div class="flex justify-end gap-2 mt-6">
+              <app-button 
+                label="Cancelar"
+                icon="pi pi-ban"
+                buttonClass="p-button-text"
+                tooltip="Cancelar operação"
+                (clicked)="navigateToList()">
+              </app-button>
+              
+              <app-button 
+                label="Atualizar"
+                icon="pi pi-save"
+                buttonClass="p-button-warning"
+                tooltip="Salvar alterações"
+                [disabled]="todoForm().invalid()"
+                (clicked)="updateTodo()">
+              </app-button>
             </div>
-            
-            <div>
-              <label class="flex items-center gap-2">
-                <p-checkbox 
-                  [binary]="true"
-                  [(ngModel)]="todoData.completed">
-                </p-checkbox>
-                <span class="text-sm font-medium text-gray-700">Tarefa concluída</span>
-              </label>
-            </div>
-          </div>
-          
-          <div class="flex justify-end gap-2 mt-6">
-            <app-button 
-              label="Cancelar"
-              icon="pi pi-ban"
-              buttonClass="p-button-text"
-              tooltip="Cancelar operação"
-              (clicked)="navigateToList()">
-            </app-button>
-            
-            <app-button 
-              label="Atualizar"
-              icon="pi pi-save"
-              buttonClass="p-button-warning"
-              tooltip="Salvar alterações"
-              (clicked)="updateTodo()">
-            </app-button>
-          </div>
+          </form>
         </p-card>
 
         <!-- Error State -->
@@ -145,12 +154,19 @@ export class TodoEditPage implements OnInit {
   private messageService = inject(MessageService);
 
   editTodo = signal<TodoItem | null>(null);
-  todoData: TodoItem = {
+  
+  initialModel = signal<TodoItem>({
     id: 0,
     title: '',
     priority: 1,
     completed: false
-  };
+  });
+
+  todoForm = form(this.initialModel, (f) => {
+    metadata(f.title, REQUIRED, () => true);
+    metadata(f.priority, MIN, () => 1);
+    metadata(f.priority, MAX, () => 3);
+  });
 
   ngOnInit() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
@@ -158,12 +174,12 @@ export class TodoEditPage implements OnInit {
       // Buscar tarefa do backend para edição
       this.todoService.getTodoByIdFromApi(id).subscribe({
         next: (response) => {
-          console.log('✅ Tarefa carregada para edição:', response);
+          console.log('Tarefa carregada para edição:', response);
           this.editTodo.set(response);
-          this.todoData = { ...response };
+          this.initialModel.set(response);
         },
         error: (error) => {
-          console.error('❌ Erro ao carregar tarefa:', error);
+          console.error('Erro ao carregar tarefa:', error);
           this.messageService.add({
             severity: 'error',
             summary: 'Erro',
@@ -175,19 +191,21 @@ export class TodoEditPage implements OnInit {
   }
 
   updateTodo() {
-    if (!this.todoData.title.trim()) {
+    if (this.todoForm().invalid()) {
       this.messageService.add({
         severity: 'error',
         summary: 'Erro',
-        detail: 'Título é obrigatório'
+        detail: 'Verifique os campos obrigatórios'
       });
       return;
     }
 
+    const values = this.todoForm().value();
+
     // Atualizar tarefa no backend via API (usando PUT)
-    this.todoService.updateTodoInApi(this.todoData).subscribe({
+    this.todoService.updateTodoInApi(values).subscribe({
       next: (response) => {
-        console.log('✅ Tarefa atualizada no backend:', response);
+        console.log('Tarefa atualizada no backend:', response);
         this.messageService.add({
           severity: 'success',
           summary: 'Sucesso',
@@ -200,7 +218,7 @@ export class TodoEditPage implements OnInit {
         }, 1000);
       },
       error: (error) => {
-        console.error('❌ Erro ao atualizar tarefa:', error);
+        console.error('Erro ao atualizar tarefa:', error);
         this.messageService.add({
           severity: 'error',
           summary: 'Erro',

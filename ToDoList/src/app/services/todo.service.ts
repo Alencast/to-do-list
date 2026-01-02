@@ -94,11 +94,11 @@ export class TodoService {
   loadTodosFromApi(): void {
     this.http.get<TodoItem[]>(this.apiUrl + '/').subscribe({
       next: (response) => {
-        console.log('✅ Tarefas carregadas do backend:', response);
+        console.log('Tarefas carregadas do backend:', response);
         this.todos.set(response);
       },
       error: (error) => {
-        console.error('❌ Erro ao carregar tarefas:', error);
+        console.error('Erro ao carregar tarefas:', error);
       }
     });
   }
