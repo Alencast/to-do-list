@@ -178,12 +178,12 @@ export class TodoListPage {
       // Deletar tarefa no backend via API
       this.todoService.deleteTodoFromApi(todo.id).subscribe({
         next: () => {
-          console.log('✅ Tarefa deletada do backend:', todo.title);
+          console.log('Tarefa deletada do backend:', todo.title);
           // Recarregar lista após deletar
           this.todoService.loadTodosFromApi();
         },
         error: (error) => {
-          console.error('❌ Erro ao deletar tarefa:', error);
+          console.error('Erro ao deletar tarefa:', error);
           alert('Erro ao deletar tarefa. Verifique o console.');
         }
       });
@@ -213,12 +213,12 @@ export class TodoListPage {
   }
 
   testApi() {
-    console.log('🚀 Iniciando teste da API Django...');
+    console.log('Iniciando teste da API Django...');
     this.todoService.testApiConnection();
   }
 
   reloadTodos() {
-    console.log('🔄 Recarregando tarefas do backend...');
+    console.log('Recarregando tarefas do backend...');
     this.todoService.loadTodosFromApi();
   }
 }

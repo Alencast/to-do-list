@@ -87,7 +87,7 @@ export class TodoDetailPage implements OnInit {
       // Buscar tarefa do backend via API
       this.todoService.getTodoByIdFromApi(id).subscribe({
         next: (response) => {
-          console.log('✅ Tarefa carregada do backend:', response);
+          console.log('Tarefa carregada do backend:', response);
           this.todo.set(response);
         },
         error: (error) => {
