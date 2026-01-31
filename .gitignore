@@ -1,0 +1,87 @@
+# Python
+*.py[cod]
+*$py.class
+*.so
+.Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+.venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Django
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+media/
+staticfiles/
+static_root/
+
+# Node.js / Angular
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+.node_repl_history
+*.tgz
+
+# Angular
+ToDoList/dist/
+ToDoList/.angular/
+ToDoList/coverage/
+ToDoList/tmp/
+ToDoList/out-tsc/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# gRPC arquivos gerados
+grpc-demo/hello_pb2.py
+grpc-demo/hello_pb2_grpc.py
+grpc-demo/__pycache__/
+backend/protos/*_pb2.py
+backend/protos/*_pb2_grpc.py
+backend/protos/__pycache__/
+
+# Environment variables
+.env
+.env.local
+
+# Coverage
+htmlcov/
+.coverage
+*.cover
+
+# Scripts auxiliares (opcional - remova se quiser versionar)
+start-all.bat
+start-all.sh
