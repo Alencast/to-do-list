@@ -111,14 +111,17 @@ export class TodoCreatePage {
   private router = inject(Router);
   private todoService = inject(TodoService);
 
-  // Fonte da verdade: Signal original
+  // SIGNAL FORMS: Modelo inicial do formulário (estado reativo)
+  // Define valores padrão para campos do formulário de criação
   initialModel = signal({
     title: '',
     priority: 1,
     completed: false
   });
 
-  // Signal Form: Mapeia o signal e aplica regras
+  // SIGNAL FORMS: Formulário reativo com validações automáticas
+  // Mais simples que Reactive Forms tradicional - sem FormBuilder/FormGroup
+  // Validações: título obrigatório, prioridade entre 1 e 3
   todoForm = form(this.initialModel, (f) => {
     metadata(f.title, REQUIRED, () => true);
     metadata(f.priority, MIN, () => 1);

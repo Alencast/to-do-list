@@ -153,8 +153,11 @@ export class TodoEditPage implements OnInit {
   private todoService = inject(TodoService);
   private messageService = inject(MessageService);
 
+  // SIGNAL: Armazena a tarefa original carregada do backend
   editTodo = signal<TodoItem | null>(null);
   
+  // SIGNAL FORMS: Modelo inicial do formulário (fonte da verdade)
+  // Quando este signal muda, o formulário é recriado automaticamente
   initialModel = signal<TodoItem>({
     id: 0,
     title: '',
@@ -162,6 +165,9 @@ export class TodoEditPage implements OnInit {
     completed: false
   });
 
+  // SIGNAL FORMS: Formulário reativo baseado em signals
+  // Substitui FormBuilder/FormGroup - validações são aplicadas automaticamente
+  // todoForm().invalid() e todoForm().value() são computed signals
   todoForm = form(this.initialModel, (f) => {
     metadata(f.title, REQUIRED, () => true);
     metadata(f.priority, MIN, () => 1);

@@ -9,6 +9,8 @@ import { Observable } from 'rxjs';
 export class TodoService {
   private apiUrl = 'http://localhost:8000/api/todos';
   
+  // SIGNAL: Estado global reativo - qualquer mudança aqui atualiza todos os componentes automaticamente
+  // Substitui Subject/BehaviorSubject do RxJS para gerenciamento de estado síncrono
   private todos = signal<TodoItem[]>([
     { id: 1, title: 'Completar projeto Angular', priority: 1, completed: false },
     { id: 2, title: 'Estudar PrimeNG', priority: 2, completed: true },

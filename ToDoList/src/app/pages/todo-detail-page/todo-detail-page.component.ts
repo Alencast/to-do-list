@@ -75,6 +75,8 @@ import { CardModule } from 'primeng/card';
   `
 })
 export class TodoDetailPage implements OnInit {
+  // SIGNAL: Estado local do componente - armazena a tarefa carregada
+  // Quando .set() é chamado, o template é atualizado automaticamente
   protected todo = signal<TodoItem | null>(null);
   
   private route = inject(ActivatedRoute);

@@ -33,7 +33,7 @@ class TodoServiceServicer(hello_pb2_grpc.TodoServiceServicer):
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     hello_pb2_grpc.add_TodoServiceServicer_to_server(TodoServiceServicer(), server)
-    server.add_insecure_port('[::]:50051')
+    server.add_insecure_port('0.0.0.0:50051')
     print(' Servidor gRPC rodando na porta 50051...')
     print(' Listando todos do banco de dados Django')
     server.start()
