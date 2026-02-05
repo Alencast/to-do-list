@@ -48,7 +48,7 @@ if __name__ == '__main__':
     try:
         run(server_address)
     except grpc.RpcError as e:
-        print(f'\n❌ Erro ao conectar ao servidor: {e.details()}')
+        print(f'\nErro ao conectar ao servidor: {e.details()}')
         print(f'Verifique se o servidor está rodando em {server_address}')
     except Exception as e:
-        print(f'\n❌ Erro: {str(e)}')
+        print(f'\nErro: {str(e)}')

@@ -1,6 +1,6 @@
 # Autenticação JWT - To-Do List Application
 
-## 📋 Índice
+## Índice
 1. [Visão Geral](#visão-geral)
 2. [Backend (Django)](#backend-django)
 3. [Frontend (Angular)](#frontend-angular)
@@ -9,15 +9,15 @@
 
 ---
 
-## 🎯 Visão Geral
+## Visão Geral
 
 Este projeto implementa autenticação JWT (JSON Web Token) completa, protegendo rotas e requisições HTTP entre frontend (Angular) e backend (Django REST Framework). 
 
 ### Requisitos Implementados:
-✅ Tela de login com usuário e senha  
-✅ Serviço de autenticação JWT no backend  
-✅ Guard (CanActivate) para proteção de rotas  
-✅ Interceptor HTTP para envio automático do token JWT  
+- Tela de login com usuário e senha  
+- Serviço de autenticação JWT no backend  
+- Guard (CanActivate) para proteção de rotas  
+- Interceptor HTTP para envio automático do token JWT  
 
 ---
 
@@ -333,22 +333,22 @@ export const routes: Routes = [
   { 
     path: 'todos', 
     loadComponent: () => import('./pages/todo-list-page/todo-list-page.component').then(m => m.TodoListPage),
-    canActivate: [authGuard]  // ✅ PROTEGIDO - requer autenticação
+    canActivate: [authGuard]  // PROTEGIDO - requer autenticação
   },
   { 
     path: 'todos/new', 
     loadComponent: () => import('./pages/todo-create-page/todo-create-page.component').then(m => m.TodoCreatePage),
-    canActivate: [authGuard]  // ✅ PROTEGIDO
+    canActivate: [authGuard]  // PROTEGIDO
   },
   { 
     path: 'todos/:id/edit', 
     loadComponent: () => import('./pages/todo-edit-page/todo-edit-page.component').then(m => m.TodoEditPage),
-    canActivate: [authGuard]  // ✅ PROTEGIDO
+    canActivate: [authGuard]  // PROTEGIDO
   },
   { 
     path: 'todos/:id', 
     loadComponent: () => import('./pages/todo-detail-page/todo-detail-page.component').then(m => m.TodoDetailPage),
-    canActivate: [authGuard]  // ✅ PROTEGIDO
+    canActivate: [authGuard]  // PROTEGIDO
   },
 ];
 ```
@@ -361,7 +361,7 @@ export const routes: Routes = [
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    provideHttpClient(withInterceptors([authInterceptor])),  // ✅ Registra interceptor
+    provideHttpClient(withInterceptors([authInterceptor])),  // Registra interceptor
     // ...
   ]
 };
@@ -542,14 +542,14 @@ export const appConfig: ApplicationConfig = {
 
 ---
 
-## 🎯 Conclusão
+## Conclusão
 
 O sistema implementa os 4 requisitos completamente:
 
-1. ✅ **Tela de Login:** `login.component.ts` com formulário reativo
-2. ✅ **Serviço JWT Backend:** `LoginView` com `rest_framework_simplejwt`
-3. ✅ **Guard (CanActivate):** `authGuard` protege rotas de todos
-4. ✅ **Interceptor HTTP:** `authInterceptor` adiciona `Authorization: Bearer <token>` automaticamente
+1. **Tela de Login:** `login.component.ts` com formulário reativo
+2. **Serviço JWT Backend:** `LoginView` com `rest_framework_simplejwt`
+3. **Guard (CanActivate):** `authGuard` protege rotas de todos
+4. **Interceptor HTTP:** `authInterceptor` adiciona `Authorization: Bearer <token>` automaticamente
 
 O fluxo é completo e seguro:
 - Tokens são gerados no backend com criptografia HS256

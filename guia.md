@@ -1,11 +1,11 @@
 # Guia de Apresentação - To-Do List
 
-## 📋 Funcionalidades Implementadas
+## Funcionalidades Implementadas
 
-- ✅ Tela de login com usuário e senha
-- ✅ Serviço de autenticação JWT no backend
-- ✅ Guard (CanActivate) para proteção de rotas
-- ✅ Interceptor HTTP para envio automático do token JWT
+- Tela de login com usuário e senha
+- Serviço de autenticação JWT no backend
+- Guard (CanActivate) para proteção de rotas
+- Interceptor HTTP para envio automático do token JWT
 
 ---
 
@@ -65,19 +65,19 @@ Signals são uma nova forma **reativa** de gerenciar estado no Angular. Substitu
 
 ### Como São Usados na Aplicação
 
-#### 1️⃣ **Gerenciamento de Estado Global** - `todo.service.ts`
+#### 1. **Gerenciamento de Estado Global** - `todo.service.ts`
 **O que faz:** 
 - `private todos = signal<TodoItem[]>([])` - Armazena lista de tarefas
 - Qualquer mudança no signal atualiza automaticamente todos os componentes que o leem
 - Métodos como `addTodo()`, `updateTodo()`, `deleteTodo()` usam `.set()` para atualizar o estado
 
-#### 2️⃣ **State Local de Componentes** - `todo-detail-page.component.ts` e `todo-edit-page.component.ts`
+#### 2. **State Local de Componentes** - `todo-detail-page.component.ts` e `todo-edit-page.component.ts`
 **O que faz:**
 - `todo = signal<TodoItem | null>(null)` - Armazena tarefa atual
 - `editTodo = signal<TodoItem | null>(null)` - Armazena tarefa em edição
 - Usado no template com `todo()` - atualiza automaticamente a UI quando muda
 
-#### 3️⃣ **Signal Forms** - `todo-create-page.component.ts` e `todo-edit-page.component.ts`
+#### 3. **Signal Forms** - `todo-create-page.component.ts` e `todo-edit-page.component.ts`
 **O que faz:**
 - `initialModel = signal({...})` - Estado inicial do formulário
 - `todoForm = form(initialModel, validações)` - Cria formulário reativo com signals

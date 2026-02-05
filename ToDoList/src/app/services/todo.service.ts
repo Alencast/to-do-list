@@ -107,15 +107,15 @@ export class TodoService {
   
   // Testar conexão com API Django
   testApiConnection(): void {
-    console.log('🔄 Testando conexão com Django REST API...');
+    console.log('Testando conexão com Django REST API...');
     this.http.get<{message: string}>(this.apiUrl + '/teste/').subscribe({
       next: (response) => {
-        console.log('✅ Conexão bem-sucedida!');
-        console.log('📦 Resposta do servidor:', response);
-        console.log('💬 Mensagem:', response.message);
+        console.log('Conexão bem-sucedida!');
+        console.log('Resposta do servidor:', response);
+        console.log('Mensagem:', response.message);
       },
       error: (error) => {
-        console.error('❌ Erro ao conectar com a API:', error);
+        console.error('Erro ao conectar com a API:', error);
         console.error('Detalhes:', error.message);
       }
     });

@@ -32,13 +32,13 @@ python client.py localhost:50051
 python client.py 192.168.1.100:50051
 ```
 
-O cliente vai buscar TODOS os itens da todo list cadastrados no banco de dados! 📋
+O cliente vai buscar TODOS os itens da todo list cadastrados no banco de dados!
 
 ---
 
 ## 3. Rodar em MÁQUINAS DIFERENTES (servidor e cliente separados)
 
-### 🖥️ Na máquina do SERVIDOR:
+### Na máquina do SERVIDOR:
 
 #### Passo 1: Descobrir seu IP local
 No Windows, execute no terminal:
@@ -61,11 +61,11 @@ Exemplo: `192.168.1.100`
 cd grpc-demo
 python server.py
 ```
-✅ Servidor rodando e aceitando conexões externas na porta 50051
+Servidor rodando e aceitando conexões externas na porta 50051
 
 ---
 
-### 💻 Na máquina do CLIENTE (outra pessoa):
+### Na máquina do CLIENTE (outra pessoa):
 
 #### Rodar o cliente
 
@@ -85,17 +85,17 @@ python client.py 192.168.1.100:50051
 
 ---
 
-## ⚠️ Requisitos para conexão entre máquinas diferentes:
+## Requisitos para conexão entre máquinas diferentes:
 
-✅ **Mesma rede:** Ambas as máquinas devem estar na mesma rede local (mesma Wi-Fi ou rede cabeada)
+- **Mesma rede:** Ambas as máquinas devem estar na mesma rede local (mesma Wi-Fi ou rede cabeada)
 
-✅ **Firewall liberado:** A porta 50051 deve estar liberada no firewall da máquina do servidor
+- **Firewall liberado:** A porta 50051 deve estar liberada no firewall da máquina do servidor
 
-✅ **IP correto:** O cliente deve usar o IP local do servidor (não use `localhost` ou `127.0.0.1`)
+- **IP correto:** O cliente deve usar o IP local do servidor (não use `localhost` ou `127.0.0.1`)
 
 ---
 
-## 🔧 Troubleshooting
+## Troubleshooting
 
 ### Erro: "failed to connect to all addresses"
 - Verifique se o servidor está rodando

@@ -1,6 +1,6 @@
-# 🚀 Guia de Execução - Todo List com gRPC
+# Guia de Execução - Todo List com gRPC
 
-## 📋 Pré-requisitos
+## Pré-requisitos
 
 - Python 3.8+
 - Node.js 18+
@@ -8,7 +8,7 @@
 
 ---
 
-## 🔧 Instalação (Primeira Vez)
+## Instalação (Primeira Vez)
 
 ### 1. Clonar/Baixar o Projeto
 ```bash
@@ -37,7 +37,7 @@ source .venv/Scripts/activate
 source .venv/bin/activate
 ```
 
-**✅ Você deve ver `(.venv)` no início da linha do terminal**
+Você deve ver `(.venv)` no início da linha do terminal
 
 ### 4. Instalar Dependências Python
 ```bash
@@ -63,7 +63,7 @@ cd ..
 
 ---
 
-## ▶️ Executar a Aplicação
+## Executar a Aplicação
 
 ### Opção A: Executar Tudo Separadamente (Recomendado)
 
@@ -110,7 +110,7 @@ python client.py
 
 ---
 
-## 🧪 Testar o gRPC
+## Testar o gRPC
 
 1. Certifique-se que o **Servidor gRPC** está rodando (Terminal 1)
 2. Cadastre alguns todos pelo **Frontend** (http://localhost:4200)
@@ -123,9 +123,9 @@ python client.py
 
 **Resultado esperado:**
 ```
-📋 Total de Todos: 2
+Total de Todos: 2
 
-✓ [1] Comprar pão
+[1] Comprar pão
    Prioridade: Alta
 
 ○ [2] Estudar Python
@@ -134,7 +134,7 @@ python client.py
 
 ---
 
-## ⚠️ Problemas Comuns
+## Problemas Comuns
 
 ### Erro: "ModuleNotFoundError: No module named 'django'"
 **Solução:** Ative o ambiente virtual!
@@ -218,11 +218,11 @@ cd grpc-demo && python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out
 
 ### O Que Avaliar no gRPC
 
-1. ✅ Arquivo `.proto` define serviço e mensagens
-2. ✅ Servidor gRPC conecta ao banco Django
-3. ✅ Cliente faz requisição binária (não é REST)
-4. ✅ Dados trafegam via Protocol Buffers
-5. ✅ Porta diferente do REST (50051 vs 8000)
+1. Arquivo `.proto` define serviço e mensagens
+2. Servidor gRPC conecta ao banco Django
+3. Cliente faz requisição binária (não é REST)
+4. Dados trafegam via Protocol Buffers
+5. Porta diferente do REST (50051 vs 8000)
 
 ---
 
@@ -233,7 +233,7 @@ cd grpc-demo && python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out
 
 ---
 
-## ✅ Checklist de Execução
+## Checklist de Execução
 
 - [ ] Ambiente virtual criado e ativado
 - [ ] Dependências Python instaladas

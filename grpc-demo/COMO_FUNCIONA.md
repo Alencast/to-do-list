@@ -48,7 +48,7 @@ Depois de criar o `.proto`, você roda um comando que **gera automaticamente** e
 - Classes Python das mensagens: `Todo`, `TodoList`, `Empty`
 - Código para converter entre Python e formato binário
 
-**⚠️ IMPORTANTE:** Nunca edite este arquivo manualmente! Ele é sempre gerado automaticamente.
+**IMPORTANTE:** Nunca edite este arquivo manualmente! Ele é sempre gerado automaticamente.
 
 ---
 
@@ -211,10 +211,10 @@ CLIENTE (client.py)                SERVIDOR (server.py)               BANCO (Dja
 4. **`client.py`** → Você faz chamadas para testar
 
 **Vantagens:**
-- ✅ Mais rápido que REST (mensagens menores)
-- ✅ Menos processamento (formato binário)
-- ✅ Pode fazer streaming (enviar dados em tempo real)
-- ✅ Funciona junto com a API REST (ambos acessam o mesmo banco Django)
+- Mais rápido que REST (mensagens menores)
+- Menos processamento (formato binário)
+- Pode fazer streaming (enviar dados em tempo real)
+- Funciona junto com a API REST (ambos acessam o mesmo banco Django)
 
 ---
 

@@ -93,7 +93,7 @@ export class TodoDetailPage implements OnInit {
           this.todo.set(response);
         },
         error: (error) => {
-          console.error('❌ Erro ao carregar tarefa:', error);
+          console.error('Erro ao carregar tarefa:', error);
           this.todo.set(null);
         }
       });
